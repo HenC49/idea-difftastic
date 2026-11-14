@@ -1,0 +1,47 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.github.henc.idea-difftastic</id>
+
+    <!-- Public plugin name should be written in Title Case.
+     Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
+    <name>Difftastic Diff</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor url="https://github.com/henc">henc</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
+    <description><![CDATA[
+        Syntax-aware diff in the IDE's own diff viewer, powered by <a href="https://github.com/Wilfred/difftastic">difftastic</a>.<br>
+        Compares files structurally (it understands the grammar of your language), so whitespace,
+        formatting and moved delimiters no longer produce noisy diffs. Useful for code review:
+        switch the diff window's viewer to "Difftastic" in git diff, code review, local history
+        and any other two-side comparison.<br>
+        Requires the <code>difft</code> executable (install with <code>brew install difftastic</code>
+        or <code>cargo install difftastic</code>). Configure it under
+        Settings | Tools | Diff &amp; Merge | Difftastic.
+        ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <resource-bundle>messages.DifftasticBundle</resource-bundle>
+
+    <!-- Extensions defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- If the plugin is published on JetBrains Marketplace, errors reported by users are available on the plugin page.
+             See https://plugins.jetbrains.com/docs/marketplace/error-handler.html#developers-side for details. -->
+        <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
+        <applicationService serviceImplementation="com.github.henc.difftastic.settings.DifftasticSettings"/>
+        <diff.DiffTool implementation="com.github.henc.difftastic.diff.DifftasticDiffTool"/>
+        <applicationConfigurable parentId="diff.base"
+                                 id="settings.difftastic"
+                                 instance="com.github.henc.difftastic.settings.DifftasticConfigurable"
+                                 displayName="Difftastic"/>
+        <notificationGroup id="Difftastic" displayType="BALLOON"/>
+    </extensions>
+
+</idea-plugin>
